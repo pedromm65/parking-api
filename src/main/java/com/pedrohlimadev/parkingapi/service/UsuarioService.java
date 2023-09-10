@@ -1,6 +1,8 @@
 package com.pedrohlimadev.parkingapi.service;
 
 import com.pedrohlimadev.parkingapi.entity.Usuario;
+import com.pedrohlimadev.parkingapi.exception.EntityNotFoundException;
+import com.pedrohlimadev.parkingapi.exception.UsernameUniqueViolationException;
 import com.pedrohlimadev.parkingapi.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,13 +18,16 @@ public class UsuarioService {
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
-        return usuarioRepository.save(usuario);
+        try {
+            return usuarioRepository.save(usuario);
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            throw new UsernameUniqueViolationException(String.format("Username {%s} já cadastrado", usuario.getUsername()));
+        }
     }
-
     @Transactional(readOnly = true)
     public Usuario buscarPorId(long id) {
         return usuarioRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Usuario não encontrado")
+                () -> new EntityNotFoundException(String.format("Usuario id=%s não encontrado.", id))
         );
     }
 
