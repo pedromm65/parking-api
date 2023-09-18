@@ -33,11 +33,11 @@ public class UsuarioController {
     @Operation(summary = "Criar um novo usuario", description = "Recurso para criar um novo usuario",
                 responses = {
             @ApiResponse(responseCode = "201", description = "Recurso criado com sucesso",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDto.class))),
+                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = UsuarioResponseDto.class))),
             @ApiResponse(responseCode = "409", description = "Usuario e-mail ja cadastrado no sistema",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
             @ApiResponse(responseCode = "422", description = "Recurso não processado por dados de entrada invalidos",
-                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
+                        content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
                 })
     @PostMapping
     public ResponseEntity<UsuarioResponseDto> create(@Valid @RequestBody UsuarioCreateDto createDto) {
@@ -65,6 +65,8 @@ public class UsuarioController {
                     @ApiResponse(responseCode = "404", description = "Recurso não encontrado",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "400", description = "Senha não confere",
+                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
+                    @ApiResponse(responseCode = "422", description = "Campos invalidos ou mal formatados",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class)))
             })
     @PatchMapping ("/{id}")
