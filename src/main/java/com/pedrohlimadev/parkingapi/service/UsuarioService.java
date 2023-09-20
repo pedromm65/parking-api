@@ -2,6 +2,7 @@ package com.pedrohlimadev.parkingapi.service;
 
 import com.pedrohlimadev.parkingapi.entity.Usuario;
 import com.pedrohlimadev.parkingapi.exception.EntityNotFoundException;
+import com.pedrohlimadev.parkingapi.exception.PasswordInvalidException;
 import com.pedrohlimadev.parkingapi.exception.UsernameUniqueViolationException;
 import com.pedrohlimadev.parkingapi.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,12 +36,12 @@ public class UsuarioService {
     public Usuario editarSenha(long id, String senhaAtual, String novaSenha, String confirmaSenha) {
 
         if (!novaSenha.equals(confirmaSenha)) {
-            throw new RuntimeException("Nova senha não confere com confirmação de senha.");
+            throw new PasswordInvalidException("Nova senha não confere com confirmação de senha.");
         }
 
         Usuario user = buscarPorId(id);
         if(!user.getPassword().equals(senhaAtual)) {
-            throw new RuntimeException("Sua senha não confere");
+            throw new PasswordInvalidException("Sua senha não confere");
         }
 
         user.setPassword(novaSenha);
