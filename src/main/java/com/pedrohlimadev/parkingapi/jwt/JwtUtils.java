@@ -27,7 +27,7 @@ public class JwtUtils {
 
     }
 
-    private static Key generateKey() {]
+    private static Key generateKey() {
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     }
 
