@@ -25,7 +25,7 @@ import java.util.List;
 @Tag(name= "Usuarios", description = "Contem todas as operações relativas a entidade Usuario ")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("api/v1/usuarios")
+@RequestMapping("/api/v1/usuarios")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;

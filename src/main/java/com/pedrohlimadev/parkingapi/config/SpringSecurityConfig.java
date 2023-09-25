@@ -27,13 +27,13 @@ public class SpringSecurityConfig {
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "api/v1/usuarios").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/v1/auth").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/usuarios").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth").permitAll()
                         .anyRequest().authenticated()
                 ).sessionManagement(
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 ).addFilterBefore(
-                        new JwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class
+                        jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class
                 ).build();
 
     }
