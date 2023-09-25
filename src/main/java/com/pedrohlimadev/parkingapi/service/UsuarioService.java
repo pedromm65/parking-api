@@ -6,6 +6,7 @@ import com.pedrohlimadev.parkingapi.exception.PasswordInvalidException;
 import com.pedrohlimadev.parkingapi.exception.UsernameUniqueViolationException;
 import com.pedrohlimadev.parkingapi.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,10 +17,12 @@ import java.util.List;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public Usuario salvar(Usuario usuario) {
         try {
+            usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
             return usuarioRepository.save(usuario);
         } catch (org.springframework.dao.DataIntegrityViolationException ex) {
             throw new UsernameUniqueViolationException(String.format("Username {%s} já cadastrado", usuario.getUsername()));
@@ -40,11 +43,11 @@ public class UsuarioService {
         }
 
         Usuario user = buscarPorId(id);
-        if(!user.getPassword().equals(senhaAtual)) {
+        if(!passwordEncoder.matches(senhaAtual, user.getPassword())) {
             throw new PasswordInvalidException("Sua senha não confere");
         }
 
-        user.setPassword(novaSenha);
+        user.setPassword(passwordEncoder.encode(novaSenha));
         return user;
     }
 
